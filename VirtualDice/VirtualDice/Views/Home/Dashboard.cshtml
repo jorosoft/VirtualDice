@@ -1,0 +1,131 @@
+﻿@using VirtualDice.Models;
+@model NickName;
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+<div id="dashboard">
+    <h2>@ViewData["Title"]</h2>
+
+    <p>Welcome, <span id="nick">@Model.Name</span></p>
+
+    <div id="scores">
+        <table id="scores-table">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Dices</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody id="scores-content">
+
+            </tbody>
+        </table>
+    </div>
+
+
+    <div>
+        <h3 id="spn-nick"></h3>
+        <form id="frm-send-message" action="#">
+            <input type="submit" id="send" value="Roll Dices" class="send" />
+        </form>
+        <div class="clear">
+        </div>
+        <ul id="messages"></ul>
+    </div>
+
+
+    <script src="~/lib/signalr/signalr.js"></script>
+
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/dashboard")
+            .build();
+
+        connection.start().catch(err => console.error(err.toString()));
+
+        connection.on('Enter', (users) => {
+            users.forEach(user => {
+                const isUserAlreadyIn = document.getElementById(user.name); 
+
+                if (!isUserAlreadyIn) {
+                    appendLine(user);
+                } 
+
+                updateScore(user);
+            });
+        });
+
+        connection.on('Quit', (result) => {
+            removeLine(result)
+        });
+
+        connection.on('Send', (result) => {
+            updateScore(result);
+        });
+
+        document.getElementById('frm-send-message').addEventListener('submit', event => {
+            connection.invoke('Send');
+            event.preventDefault();
+        });
+
+        function appendLine(result) {
+            let nameElement = document.createElement('td');
+            nameElement.innerText = result.name;
+
+            let diceElementOne = document.createElement('img');
+            diceElementOne.setAttribute('src', '../images/unknown.png');
+            diceElementOne.className = "slot-1";
+            let diceElementTwo = document.createElement('img');
+            diceElementTwo.setAttribute('src', '../images/unknown.png');
+            diceElementTwo.className = "slot-2";
+            let diceElementThree = document.createElement('img');
+            diceElementThree.setAttribute('src', '../images/unknown.png');
+            diceElementThree.className = "slot-3";
+
+            let dicesElement = document.createElement('td');
+            dicesElement.append(diceElementOne);
+            dicesElement.append(diceElementTwo);
+            dicesElement.append(diceElementThree);
+
+            let scoreElement = document.createElement('td');
+            scoreElement.innerText = (result && result.score) ? result.score.reduce((a, b) => a + b, 0) : 'n/a';
+            scoreElement.className = 'score';
+
+            let rowElement = document.createElement('tr')
+            rowElement.append(nameElement);
+            rowElement.append(dicesElement);
+            rowElement.append(scoreElement);
+            rowElement.setAttribute("id", result.name);
+
+            $('#scores-content').append(rowElement);
+        }
+
+        function removeLine(result) {
+            let line = document.getElementById(result.name);
+
+            if (line) {
+                line.remove();
+            }
+        }
+
+        function updateScore(result) {
+            let line = document.getElementById(result.name);
+            let scoreToUpdate = line.getElementsByClassName('score')[0];
+            let slotOne = line.getElementsByClassName('slot-1')[0];
+            let slotTwo = line.getElementsByClassName('slot-2')[0];
+            let slotThree = line.getElementsByClassName('slot-3')[0];
+
+            if (result && result.score) {
+                slotOne.setAttribute('src', `../images/${result.score[0]}.png`);
+                slotTwo.setAttribute('src', `../images/${result.score[1]}.png`);
+                slotThree.setAttribute('src', `../images/${result.score[2]}.png`);
+
+                scoreToUpdate.innerText = result.score.reduce((a, b) => a + b, 0);
+            } else {
+                scoreToUpdate.innerText = 'n/a';
+            }
+        }
+    </script>
+</div>

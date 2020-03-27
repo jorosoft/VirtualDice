@@ -1,0 +1,111 @@
+﻿.navbar img {
+    float: left;
+    height: 36px;
+    margin: 8px;
+    margin-right: 0;
+    margin-left: 15px;
+}
+
+.info {
+    color: #ccc;
+    font-size: 12px;
+    font-style: italic;
+}
+
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-top: 30px;
+}
+
+.field-validation-error {
+    color: red;
+}
+
+#enter div {
+    /*background: url(../images/dices.jpg);
+    background-position-x:center;
+    background-size: 125px;
+    background-repeat: no-repeat;*/
+    width: 25%;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 20px;
+    background-color: aliceblue;
+}
+
+#dashboard {
+    width: 80%;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 20px;
+    text-align: center;
+}
+
+    #dashboard table {
+        width: 30%;
+        margin: 0 auto;
+    }
+
+        #dashboard table th {
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+
+        #dashboard table td {
+            border: 1px solid #ccc;
+            padding-top: 4px;
+            padding-bottom: 4px;
+        }
+
+    #dashboard .slot-1, #dashboard .slot-2, #dashboard .slot-3 {
+        margin: 5px;
+    }
+
+
+    /* Media queries */
+
+@media (max-width: 1200px) {
+    #enter div {
+        width: 35%
+    }
+}
+
+@media (max-width: 990px) {
+    #enter div {
+        width: 40%
+    }
+}
+
+@media (max-width: 680px) {
+    #enter div {
+        width: 50%
+    }
+}
+
+@media (max-width: 540px) {
+    #enter div {
+        width: 60%
+    }
+}
+
+@media (max-width: 450px) {
+    #enter div {
+        width: 80%
+    }
+}
+
+@media (max-width: 340px) {
+    #enter div {
+        width: 90%
+    }
+}

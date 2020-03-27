@@ -1,0 +1,30 @@
+﻿@using VirtualDice.Models;
+@model NickName;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row" id="enter">
+    @using (Html.BeginForm("Dashboard", "Home", FormMethod.Post)) {
+    <div>
+        @Html.AntiForgeryToken()
+
+        @Html.LabelFor(x => x.Name, "Enter your nickname: ")
+        @Html.TextBoxFor(x => x.Name)
+
+        <input type="submit" name="submit-btn" value="Enter" />
+
+        <br />
+
+        <span class="info">Min 2 symbols, max 10 symbols</span>
+
+        <br />
+
+        @Html.ValidationMessageFor(x => x.Name)
+        @Html.ValidationMessage("NickNameTaken")
+
+
+    </div>
+    }
+</div>
