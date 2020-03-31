@@ -46,10 +46,13 @@
         connection.start().catch(err => console.error(err.toString()));
 
         connection.on('Enter', (users) => {
+            
+
             users.forEach(user => {
                 const isUserAlreadyIn = document.getElementById(user.name); 
 
                 if (!isUserAlreadyIn) {
+                    connection.invoke('UpdateUser', '@Model.Name');
                     appendLine(user);
                 } 
 

@@ -31,9 +31,16 @@ namespace VirtualDice.Controllers
             if (!ModelState.IsValid)
             {
                 return this.View("Index", nickName);
-            }            
+            }
 
-            this.Response.Cookies.Append("user", nickName.Name);
+            nickName.Score = null;
+
+            if (UsersHandler.Users.Count == 0)
+            {
+                nickName.IsAdmin = true;
+            }
+
+            UsersHandler.Users.Add(nickName);
 
             return View(nickName);
         }
@@ -43,6 +50,6 @@ namespace VirtualDice.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        
+
     }
 }

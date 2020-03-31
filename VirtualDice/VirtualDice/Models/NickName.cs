@@ -11,6 +11,8 @@ namespace VirtualDice.Models
 
         public int[] Score { get; set; }
 
-        public bool isAdmin { get; set; }
+        public bool IsAdmin { get; set; }
+
+        public string ConnectionId { get; set; }
     }
 }

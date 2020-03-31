@@ -9,29 +9,8 @@ namespace VirtualDice.Hubs
 {
     public class DashbordHub : Hub
     {
-        private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly string user;
-
-        public DashbordHub(IHttpContextAccessor httpContextAccessor)
-        {
-            this.httpContextAccessor = httpContextAccessor;
-            this.user = this.httpContextAccessor.HttpContext.Request.Cookies["user"];
-        }
-
         public override Task OnConnectedAsync()
         {
-            var user = new NickName
-            {
-                Name = this.user
-            };
-
-            if (UsersHandler.Users.Count == 0)
-            {
-                user.isAdmin = true;
-            }
-
-            UsersHandler.Users.Add(user);
-
             Clients.All.SendAsync("Enter", UsersHandler.Users.ToArray());
 
             return base.OnConnectedAsync();
@@ -39,7 +18,7 @@ namespace VirtualDice.Hubs
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            var user = UsersHandler.Users.FirstOrDefault(x => x.Name == this.user);
+            var user = UsersHandler.Users.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
 
             Clients.All.SendAsync("Quit", user);
 
@@ -48,9 +27,19 @@ namespace VirtualDice.Hubs
             return base.OnDisconnectedAsync(exception);
         }
 
+        public void UpdateUser(string userName)
+        {
+            var user = UsersHandler.Users.FirstOrDefault(x => x.Name == userName);
+
+            if (!string.IsNullOrWhiteSpace(userName) && user != null)
+            {
+                user.ConnectionId = Context.ConnectionId;
+            }
+        }
+
         public async Task Send()
         {
-            var user = UsersHandler.Users.FirstOrDefault(x => x.Name == this.user);
+            var user = UsersHandler.Users.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
 
             if (user != null && user.Score == null)
             {
