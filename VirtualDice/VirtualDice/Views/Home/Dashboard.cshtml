@@ -52,7 +52,8 @@
                 const isUserAlreadyIn = document.getElementById(user.name); 
 
                 if (!isUserAlreadyIn) {
-                    connection.invoke('UpdateUser', '@Model.Name');
+                    var userName = '@Html.Raw(Model.Name)';
+                    connection.invoke('UpdateUser', userName);
                     appendLine(user);
                 } 
 
