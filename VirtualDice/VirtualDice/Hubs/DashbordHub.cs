@@ -60,6 +60,8 @@ namespace VirtualDice.Hubs
 
                 user.Score = score;
 
+                UpdateStats(user.Name, user.Score[0] + user.Score[1] + user.Score[2]);
+
                 await Clients.All.SendAsync("Send", user);
             }
         }
@@ -76,6 +78,35 @@ namespace VirtualDice.Hubs
             }
 
             return scores;
+        }
+
+        private static void UpdateStats(string nickName, int score)
+        {
+            var playerStats = UsersHandler.PlayerStats.FirstOrDefault(x => x.NickName == nickName);
+
+            if (playerStats != null)
+            {
+                if (score > playerStats.BestScore)
+                {
+                    playerStats.BestScore = score;
+                }
+
+                playerStats.TotalScore += score;
+                playerStats.TotalGamesPlayed++;
+            }
+            else
+            {
+                playerStats = new PlayerStats
+                {
+                    NickName = nickName,
+                    BestScore = score
+                };
+
+                playerStats.TotalScore += score;
+                playerStats.TotalGamesPlayed++;
+
+                UsersHandler.PlayerStats.Add(playerStats);
+            }
         }
 
     }

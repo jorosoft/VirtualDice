@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -43,6 +44,20 @@ namespace VirtualDice.Controllers
             UsersHandler.Users.Add(nickName);
 
             return View(nickName);
+        }
+
+        [HttpGet]
+        public IActionResult Leaderboard()
+        {
+            var userStats = UsersHandler.PlayerStats.OrderByDescending(x => x.TotalScore).ToList();
+
+            ViewBag.ServerStartDate = UsersHandler.ServerStartDate.ToString(new CultureInfo("en-GB"));
+
+            var totalGamesPlayed = userStats.Select(x => x.TotalGamesPlayed).ToList();
+
+            ViewBag.TotalGamesPlayed = (totalGamesPlayed == null || totalGamesPlayed.Count == 0) ? 0 : totalGamesPlayed.Aggregate((a, b) => a + b);
+
+            return View(userStats);
         }
 
         public IActionResult Error()

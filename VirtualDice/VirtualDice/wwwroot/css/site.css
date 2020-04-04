@@ -71,9 +71,33 @@ body {
         margin: 5px;
     }
 
+#leaderboard {
+}
 
-    /* Media queries */
+    #leaderboard th {
+        border: 1px solid gray;
+        text-align: center;
+        background-color: aliceblue;
+        padding: 3px;
+    }
 
+    #leaderboard td {
+        border: 1px solid gray;
+        text-align: right;
+        padding: 3px;
+    }
+
+        #leaderboard td:first-child {
+            text-align: left;
+            font-weight: bold;
+        }
+
+        #leaderboard td:last-child {
+            background-color: lightyellow;
+            font-weight: bold;
+        }
+
+/* Media queries */
 @media (max-width: 1200px) {
     #enter div {
         width: 35%

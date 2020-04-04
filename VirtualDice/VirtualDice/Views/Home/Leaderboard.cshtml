@@ -1,0 +1,38 @@
+﻿@using VirtualDice.Models
+@model IEnumerable<PlayerStats>
+
+
+@{
+    ViewData["Title"] = "Leaderboard";
+}
+
+<h2>Leaderboard</h2>
+
+<h5>The data is valid from @ViewBag.ServerStartDate UTC to now</h5>
+
+<h6>Total games played: @ViewBag.TotalGamesPlayed</h6>
+
+<table id="leaderboard">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Total Games Played</th>
+            <th>Best score</th>
+            <th>Total score</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.NickName</td>
+                <td>@user.TotalGamesPlayed</td>
+                <td>@user.BestScore</td>
+                <td>@user.TotalScore</td>
+            </tr>
+        }
+    </tbody>
+
+
+</table>
